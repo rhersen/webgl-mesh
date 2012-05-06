@@ -1,4 +1,5 @@
 var shaders = require('./shaders');
+var mesh = require('./mesh');
 
 var gl;
 var xRotation;
@@ -37,9 +38,9 @@ function mousemove(x, y) {
     }
 }
 
-function init(context, parsed) {
+function init(context) {
     gl = context;
-    model = parsed;
+    model = mesh.create(3);
     gl.enable(gl.DEPTH_TEST);
     gl.enable(gl.CULL_FACE);
     gl.cullFace(gl.BACK);
