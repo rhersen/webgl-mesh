@@ -2,12 +2,17 @@ var shaders = require('./shaders');
 var mesh = require('./mesh');
 
 var gl;
+var window;
 var xRotation;
 var yRotation;
 var model;
+var millis;
 
 function draw() {
+    var val = new Date().getTime() - 0;
+    gl.uniform1f(millis, val % 60000);
     gl.drawElements(gl.TRIANGLES, model.getFaces().length, gl.UNSIGNED_SHORT, 0);
+    window.mozRequestAnimationFrame(draw);
 }
 
 function mousemove(x, y) {
@@ -38,16 +43,19 @@ function mousemove(x, y) {
     }
 }
 
-function init(context) {
+function init(context, win) {
     gl = context;
-    model = mesh.create(3);
+    window = win;
+    model = mesh.create(192);
     gl.enable(gl.DEPTH_TEST);
     gl.enable(gl.CULL_FACE);
     gl.cullFace(gl.BACK);
     var program = shaders.setupProgram(gl);
+    millis = gl.getUniformLocation(program, "millis");
     setupMatrices(program);
     setupVertices(program);
     setupElements();
+    window.mozRequestAnimationFrame(draw);
 }
 
 exports.draw = draw;
@@ -66,13 +74,13 @@ function setupMatrices(program) {
         1, 0, 0, 0,
         0, 1, 0, 0,
         0, 0, 1, 0,
-        0, 0, -8, 1
+        0, 0, -4, 1
     ]);
 
     gl.uniformMatrix4fv(xRotation = gl.getUniformLocation(program, "xRotation"), false, [
         1, 0, 0, 0,
-        0, 1, 0, 0,
-        0, 0, 1, 0,
+        0, 0.7, 0.7, 0,
+        0, -0.7, 0.7, 0,
         0, 0, 0, 1
     ]);
 

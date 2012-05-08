@@ -52,10 +52,9 @@ var glMock = {
     attachShader:nop
 };
 
-var imageFactoryMock = {};
+var windowMock = {};
 
-imageFactoryMock.createImage = obj;
-
+windowMock.mozRequestAnimationFrame = nop;
 
 describe('webgl', function () {
     beforeEach(function () {
@@ -63,7 +62,7 @@ describe('webgl', function () {
     });
 
     it('should not return anything', function () {
-        expect(target.init(glMock)).not.toBeDefined();
+        expect(target.init(glMock, windowMock)).not.toBeDefined();
     });
 
     it('should not return anything', function () {
@@ -71,22 +70,22 @@ describe('webgl', function () {
     });
 
     it('should use program', function () {
-        target.init(glMock);
+        target.init(glMock, windowMock);
         expect(called.useProgram).toBeTruthy();
     });
 
     it('should set perspective matrix', function () {
-        target.init(glMock);
+        target.init(glMock, windowMock);
         expect(called.uniformMatrix4fv['perspective'].length).toEqual(16);
     });
 
     it('should set view matrix', function () {
-        target.init(glMock);
+        target.init(glMock, windowMock);
         expect(called.uniformMatrix4fv['view'].length).toEqual(16);
     });
 
     it('should set yRotation matrix', function () {
-        target.init(glMock);
+        target.init(glMock, windowMock);
         expect(called.uniformMatrix4fv['yRotation'].length).toEqual(16);
     });
 

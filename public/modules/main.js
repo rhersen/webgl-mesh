@@ -10,9 +10,8 @@ var vertexLoaded = function (data) {
 
 var fragmentLoaded = function (data) {
     shaders.setFragment(data);
-    webgl.init(canvas[0].getContext("experimental-webgl"));
+    webgl.init(canvas[0].getContext("experimental-webgl"), window);
 };
-
 
 $.get('/shader.vert', '', vertexLoaded, 'text');
 
@@ -20,5 +19,4 @@ canvas.mousemove(function (event) {
     var x = event.pageX - this.offsetLeft;
     var y = event.pageY - this.offsetTop;
     webgl.mousemove(x, y);
-    webgl.draw();
 });
