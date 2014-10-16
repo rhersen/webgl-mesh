@@ -7,7 +7,7 @@ var yRotation;
 var model;
 
 function draw() {
-    gl.drawElements(gl.TRIANGLES, model.getFaces().length, gl.UNSIGNED_SHORT, 0);
+    gl.drawElements(gl.LINE_STRIP, model.getFaces().length, gl.UNSIGNED_SHORT, 0);
 }
 
 function mousemove(x, y) {
@@ -25,9 +25,9 @@ function mousemove(x, y) {
 
     function getYRotation(p) {
         return [
-            p.cos, 0, p.sin, 0,
-            0, 1, 0, 0,
-            -p.sin, 0, p.cos, 0,
+            p.cos, -p.sin, 0, 0,
+            p.sin, p.cos, 0, 0,
+            0, 0, 1, 0,
             0, 0, 0, 1
         ];
     }
@@ -40,10 +40,9 @@ function mousemove(x, y) {
 
 function init(context) {
     gl = context;
-    model = mesh.create(3);
+    model = mesh.create(256);
     gl.enable(gl.DEPTH_TEST);
-    gl.enable(gl.CULL_FACE);
-    gl.cullFace(gl.BACK);
+    gl.lineWidth(2);
     var program = shaders.setupProgram(gl);
     setupMatrices(program);
     setupVertices(program);
@@ -55,24 +54,20 @@ exports.mousemove = mousemove;
 exports.init = init;
 
 function setupMatrices(program) {
+    var right = 16;
+    var left = -right;
+    var top = 9;
+    var bottom = -top;
+    var near = -2;
+    var far = 2;
+    var tx = -(right + left) / (right - left);
+    var ty = -(top + bottom) / (top - bottom);
+    var tz = -(far + near) / (far - near);
+
     gl.uniformMatrix4fv(gl.getUniformLocation(program, "perspective"), false, [
-        2, 0, 0, 0,
-        0,32/9, 0, 0,
-        0, 0, -1, -1,
-        0, 0, -1, 0
-    ]);
-
-    gl.uniformMatrix4fv(gl.getUniformLocation(program, "view"), false, [
-        1, 0, 0, 0,
-        0, 1, 0, 0,
-        0, 0, 1, 0,
-        0, 0, -8, 1
-    ]);
-
-    gl.uniformMatrix4fv(xRotation = gl.getUniformLocation(program, "xRotation"), false, [
-        1, 0, 0, 0,
-        0, 1, 0, 0,
-        0, 0, 1, 0,
+        2/(right-left), 0, 0, tx,
+        0,2/(top-bottom), 0, ty,
+        0, 0, 2/(far-near), tz,
         0, 0, 0, 1
     ]);
 

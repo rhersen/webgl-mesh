@@ -14,6 +14,7 @@ var glMock = {
     createShader:nop,
     enable:nop,
     cullFace:nop,
+    lineWidth:nop,
     getShaderParameter:nop,
     shaderSource:nop,
     compileShader:nop,
@@ -80,11 +81,6 @@ describe('webgl', function () {
         expect(called.uniformMatrix4fv['perspective'].length).toEqual(16);
     });
 
-    it('should set view matrix', function () {
-        target.init(glMock);
-        expect(called.uniformMatrix4fv['view'].length).toEqual(16);
-    });
-
     it('should set yRotation matrix', function () {
         target.init(glMock);
         expect(called.uniformMatrix4fv['yRotation'].length).toEqual(16);
@@ -98,21 +94,4 @@ describe('webgl', function () {
         }
     });
 
-    it('should rotate when mouse is not in the middle', function () {
-        target.mousemove(200, 200);
-        expect(called.uniformMatrix4fv['yRotation'][2]).toBeGreaterThan(0);
-    });
-
-    it('xRotation matrix should be identity when mouse is in the middle', function () {
-        target.mousemove(250, 250);
-        var matrix4fv = called.uniformMatrix4fv['xRotation'];
-        for (var i = 0; i < 16; i++) {
-            expect(matrix4fv[i]).toBeCloseTo((i % 5) ? 0 : 1, 9);
-        }
-    });
-
-    it('should rotate when mouse is not in the middle', function () {
-        target.mousemove(200, 200);
-        expect(called.uniformMatrix4fv['xRotation'][9]).toBeGreaterThan(0);
-    });
 });

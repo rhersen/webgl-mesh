@@ -3,6 +3,12 @@
     width: 100%;
 }
 
+#webgl {
+    height: 576px;
+    width: 1024px;
+    background: black;
+}
+
 body {
     color: #dcdccc;
     background: #3f3f3f;

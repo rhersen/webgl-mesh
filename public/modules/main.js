@@ -11,6 +11,8 @@ var vertexLoaded = function (data) {
 var fragmentLoaded = function (data) {
     shaders.setFragment(data);
     webgl.init(canvas[0].getContext("experimental-webgl"));
+    webgl.mousemove(250, 250);
+    webgl.draw();
 };
 
 
